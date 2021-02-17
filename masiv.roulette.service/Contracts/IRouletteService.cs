@@ -5,8 +5,10 @@ namespace Masiv.Roulette.API.Contracts
 {
     public interface IRouletteService
     {
-        RouletteAddDto Add();
+        RouletteAddResponseDto Add();
 
-        List<RouletteAddDto> GetAll();
+        RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto);
+
+        List<RouletteAddResponseDto> GetAll();
     }
 }

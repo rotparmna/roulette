@@ -16,17 +16,19 @@ namespace Masiv.Roulette.API.Controllers
             this.rouletteService = rouletteService;
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(RouletteAddDto), StatusCodes.Status200OK)]
-        public RouletteAddDto Add()
+        [HttpPost("add")]
+        [ProducesResponseType(typeof(RouletteAddResponseDto), StatusCodes.Status200OK)]
+        public RouletteAddResponseDto Add()
         {
-            return this.rouletteService.Add();
+            return rouletteService.Add();
         }
 
-        //public bool Start(int idRoulette)
-        //{
-        //    return true;
-        //}
+        [HttpPost("start")]
+        [ProducesResponseType(typeof(RouletteStartResponseDto), StatusCodes.Status200OK)]
+        public RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto)
+        {
+            return rouletteService.Start(rouletteStartDto);
+        }
 
         //public void Bet(int number, int idRoulette)
         //{
@@ -39,7 +41,7 @@ namespace Masiv.Roulette.API.Controllers
         //}
 
         [HttpGet]
-        [ProducesResponseType(typeof(RouletteAddDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RouletteAddResponseDto), StatusCodes.Status200OK)]
         public string GetAll()
         {
             return string.Empty;

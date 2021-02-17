@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace Masiv.Roulette.API
 {
@@ -23,9 +24,13 @@ namespace Masiv.Roulette.API
         {
             services.AddTransient<IRouletteService, RouletteService>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(x =>
+                {
+                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             services.AddSwaggerGen(c =>
-            {
+            {   
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Masiv.Roulette.API", Version = "v1" });
             });
         }
@@ -39,13 +44,9 @@ namespace Masiv.Roulette.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Masiv.Roulette.API v1"));
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
