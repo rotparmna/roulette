@@ -1,4 +1,5 @@
 ﻿using Masiv.Roulette.API.Domain.Enums;
+using System.Collections.Generic;
 
 namespace Masiv.Roulette.API.Domain.Entities
 {
@@ -6,10 +7,12 @@ namespace Masiv.Roulette.API.Domain.Entities
     {
         public Roulette()
         {
-            this.Status = StatusEnum.None;
+            Status = StatusEnum.None;
+            Bets = new List<Bet>();
         }
 
         public string Id { get; set; }
         public StatusEnum Status { get; set; }
+        public List<Bet> Bets { get; set; }
     }
 }

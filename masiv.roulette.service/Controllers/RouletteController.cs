@@ -30,10 +30,11 @@ namespace Masiv.Roulette.API.Controllers
             return rouletteService.Start(rouletteStartDto);
         }
 
-        //public void Bet(int number, int idRoulette)
-        //{
-
-        //}
+        [HttpPost("bet")]
+        public void Bet([FromHeader(Name = "user-id")] string userId, RouletteBetDto rouletteBetDto)
+        {
+            rouletteService.Bet(userId, rouletteBetDto);
+        }
 
         //public void Close(int idRoulette)
         //{

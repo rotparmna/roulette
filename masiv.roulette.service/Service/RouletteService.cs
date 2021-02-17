@@ -29,6 +29,21 @@ namespace Masiv.Roulette.API.Service
             };
         }
 
+        public void Bet(string userId, RouletteBetDto rouletteBetDto)
+        {
+            var roulette = GetById(rouletteBetDto.IdRoulette);
+            if (roulette.Id != Guid.Empty.ToString())
+            {
+                roulette.Bets.Add(new Domain.Entities.Bet
+                {
+                    CashAmount = rouletteBetDto.CashAmount,
+                    Color = rouletteBetDto.Color,
+                    Number = rouletteBetDto.Number,
+                    UserId = userId
+                });
+            }
+        }
+
         public List<RouletteAddResponseDto> GetAll()
         {
             return roulettes.Select(x => new RouletteAddResponseDto
@@ -39,10 +54,7 @@ namespace Masiv.Roulette.API.Service
 
         public RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto)
         {
-            var roulette = roulettes
-                .Where(x => x.Id == rouletteStartDto.Id)
-                .DefaultIfEmpty(new Domain.Entities.Roulette { Id = Guid.Empty.ToString() })
-                .FirstOrDefault();
+            var roulette = GetById(rouletteStartDto.Id);
             if (roulette.Id != Guid.Empty.ToString())
             {
                 roulette.Status = Domain.Enums.StatusEnum.Open;
@@ -59,6 +71,14 @@ namespace Masiv.Roulette.API.Service
                     Result = Domain.Enums.ResultEnum.Denied
                 };
             }
+        }
+
+        private Domain.Entities.Roulette GetById(string id)
+        {
+            return roulettes
+                .Where(x => x.Id == id)
+                .DefaultIfEmpty(new Domain.Entities.Roulette { Id = Guid.Empty.ToString() })
+                .FirstOrDefault();
         }
     }
 }
