@@ -1,4 +1,5 @@
 using Masiv.Roulette.API.Contracts;
+using Masiv.Roulette.API.Middleware.Cache;
 using Masiv.Roulette.API.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,10 @@ namespace Masiv.Roulette.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var redisConnection = Configuration.GetConnectionString("Redis");
+
             services.AddTransient<IRouletteService, RouletteService>();
+            services.AddTransient(typeof(ICacheMiddleware<>), typeof(CacheMiddleware<>));
 
             services.AddControllers()
                 .AddJsonOptions(x =>
@@ -33,6 +37,8 @@ namespace Masiv.Roulette.API
             {   
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Masiv.Roulette.API", Version = "v1" });
             });
+            services.AddDistributedRedisCache(options =>
+                options.Configuration = redisConnection);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

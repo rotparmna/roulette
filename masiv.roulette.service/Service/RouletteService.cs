@@ -1,6 +1,7 @@
 ﻿using Masiv.Roulette.API.Contracts;
 using Masiv.Roulette.API.Domain.Dtos;
 using Masiv.Roulette.API.Domain.Enums;
+using Masiv.Roulette.API.Middleware.Cache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,14 @@ namespace Masiv.Roulette.API.Service
 {
     public class RouletteService : IRouletteService
     {
+        private const string NAME_KEY = "roulette";
         private readonly List<Domain.Entities.Roulette> roulettes;
+        private readonly ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware;
 
-        public RouletteService()
+        public RouletteService(ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware)
         {
             roulettes = new List<Domain.Entities.Roulette>();
+            this.cacheMiddleware = cacheMiddleware;
         }
 
         public RouletteAddResponseDto Add()
@@ -22,8 +26,9 @@ namespace Masiv.Roulette.API.Service
             {
                 Id = Guid.NewGuid().ToString()
             };
-            roulettes.Add(newRoulette);
-
+            var roulettesInCache = cacheMiddleware.GetValue(NAME_KEY);
+            roulettesInCache.Add(newRoulette);
+            cacheMiddleware.SetValue(NAME_KEY, roulettesInCache);
             return new RouletteAddResponseDto
             {
                 Id = newRoulette.Id
@@ -78,18 +83,18 @@ namespace Masiv.Roulette.API.Service
             var roulette = GetById(rouletteStartDto.Id);
             if (roulette.Id != Guid.Empty.ToString())
             {
-                roulette.Status = Domain.Enums.StatusEnum.Open;
+                roulette.Status = StatusEnum.Open;
 
                 return new RouletteStartResponseDto
                 {
-                    Result = Domain.Enums.ResultEnum.Success
+                    Result = ResultEnum.Success
                 };
             }
             else
             {
                 return new RouletteStartResponseDto
                 {
-                    Result = Domain.Enums.ResultEnum.Denied
+                    Result = ResultEnum.Denied
                 };
             }
         }
