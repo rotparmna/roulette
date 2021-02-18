@@ -11,12 +11,12 @@ namespace Masiv.Roulette.API.Service
     public class RouletteService : IRouletteService
     {
         private const string NAME_KEY = "roulette";
-        private readonly List<Domain.Entities.Roulette> roulettes;
+        private List<Domain.Entities.Roulette> roulettesInCache;
         private readonly ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware;
 
         public RouletteService(ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware)
         {
-            roulettes = new List<Domain.Entities.Roulette>();
+            roulettesInCache = cacheMiddleware.GetValue(NAME_KEY);
             this.cacheMiddleware = cacheMiddleware;
         }
 
@@ -26,9 +26,9 @@ namespace Masiv.Roulette.API.Service
             {
                 Id = Guid.NewGuid().ToString()
             };
-            var roulettesInCache = cacheMiddleware.GetValue(NAME_KEY);
+            roulettesInCache = cacheMiddleware.GetValue(NAME_KEY);
             roulettesInCache.Add(newRoulette);
-            cacheMiddleware.SetValue(NAME_KEY, roulettesInCache);
+            UpdateCache();
             return new RouletteAddResponseDto
             {
                 Id = newRoulette.Id
@@ -38,7 +38,7 @@ namespace Masiv.Roulette.API.Service
         public void Bet(string userId, RouletteBetDto rouletteBetDto)
         {
             var roulette = GetById(rouletteBetDto.IdRoulette);
-            if (roulette.Id != Guid.Empty.ToString())
+            if (roulette.Id != Guid.Empty.ToString() && roulette.Status == StatusEnum.Open)
             {
                 roulette.Bets.Add(new Domain.Entities.Bet
                 {
@@ -47,6 +47,7 @@ namespace Masiv.Roulette.API.Service
                     Number = rouletteBetDto.Number,
                     UserId = userId
                 });
+                UpdateCache();
             }
         }
 
@@ -62,6 +63,7 @@ namespace Masiv.Roulette.API.Service
                 WinningNumber = winningNumber
             };
             var roulette = GetById(rouletteCloseDto.Id);
+            roulette.Status = StatusEnum.Close;
             foreach (var item in roulette.Bets)
             {
                 double cash = 0;
@@ -75,16 +77,17 @@ namespace Masiv.Roulette.API.Service
                     item.CashAmount *= -1;
             }
 
+            UpdateCache();
             return rouletteClose;
         }
 
         public RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto)
         {
             var roulette = GetById(rouletteStartDto.Id);
-            if (roulette.Id != Guid.Empty.ToString())
+            if (roulette.Id != Guid.Empty.ToString() && roulette.Status == StatusEnum.None)
             {
                 roulette.Status = StatusEnum.Open;
-
+                UpdateCache();
                 return new RouletteStartResponseDto
                 {
                     Result = ResultEnum.Success
@@ -101,7 +104,7 @@ namespace Masiv.Roulette.API.Service
 
         public List<RouletteDto> GetAll()
         {
-            return roulettes.Select(x => new RouletteDto
+            return roulettesInCache.Select(x => new RouletteDto
             {
                 Id = x.Id,
                 Status = x.Status
@@ -110,10 +113,15 @@ namespace Masiv.Roulette.API.Service
 
         private Domain.Entities.Roulette GetById(string id)
         {
-            return roulettes
+            return roulettesInCache
                 .Where(x => x.Id == id)
                 .DefaultIfEmpty(new Domain.Entities.Roulette { Id = Guid.Empty.ToString() })
                 .FirstOrDefault();
+        }
+
+        private void UpdateCache()
+        {
+            cacheMiddleware.SetValue(NAME_KEY, roulettesInCache);
         }
     }
 }
