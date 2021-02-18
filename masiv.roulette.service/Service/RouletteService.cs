@@ -2,6 +2,7 @@
 using Masiv.Roulette.API.Domain.Dtos;
 using Masiv.Roulette.API.Domain.Enums;
 using Masiv.Roulette.API.Middleware.Cache;
+using Masiv.Roulette.API.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace Masiv.Roulette.API.Service
         private const string NAME_KEY = "roulette";
         private List<Domain.Entities.Roulette> roulettesInCache;
         private readonly ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware;
+        private readonly IGenerateRandom generateRandom;
 
-        public RouletteService(ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware)
+        public RouletteService(ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware, IGenerateRandom generateRandom)
         {
             roulettesInCache = cacheMiddleware.GetValue(NAME_KEY);
             this.cacheMiddleware = cacheMiddleware;
+            this.generateRandom = generateRandom;
         }
 
         public RouletteAddResponseDto Add()
@@ -53,7 +56,7 @@ namespace Masiv.Roulette.API.Service
 
         public RouletteCloseResponseDto Close(RouletteCloseDto rouletteCloseDto)
         {
-            int winningNumber = new Random().Next(0, 36);
+            int winningNumber = generateRandom.NextNumber(0, 36);
             ColorEnum winningColor = ColorEnum.Black;
             if (winningNumber % 2 == 0)
                 winningColor = ColorEnum.Red;
@@ -73,8 +76,16 @@ namespace Masiv.Roulette.API.Service
                 if (item.Color == winningColor)
                     cash += item.CashAmount * 1.8;
                 item.WinnigCash = cash;
-                if (!item.IsWin.Value)
-                    item.CashAmount *= -1;
+
+                rouletteClose.Bets.Add(new BetCloseDto
+                {
+                    CashAmount = item.CashAmount,
+                    Color = item.Color,
+                    IsWin = item.IsWin,
+                    Number = item.Number,
+                    UserId = item.UserId,
+                    WinnerAmount = item.WinnigCash.Value
+                });
             }
 
             UpdateCache();

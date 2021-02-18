@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masiv.Roulette.API", "Masiv.Roulette.API.csproj", "{0CB07A70-34F3-45A7-8186-3AF9050F3CFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masiv.Roulette.API", "Masiv.Roulette.API.csproj", "{0CB07A70-34F3-45A7-8186-3AF9050F3CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masiv.Roulette.APITests", "..\Masiv.Roulette.APITests\Masiv.Roulette.APITests.csproj", "{C53DCEE2-F727-4CCA-8641-3DE56C369F6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0CB07A70-34F3-45A7-8186-3AF9050F3CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CB07A70-34F3-45A7-8186-3AF9050F3CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CB07A70-34F3-45A7-8186-3AF9050F3CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C53DCEE2-F727-4CCA-8641-3DE56C369F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53DCEE2-F727-4CCA-8641-3DE56C369F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53DCEE2-F727-4CCA-8641-3DE56C369F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53DCEE2-F727-4CCA-8641-3DE56C369F6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
