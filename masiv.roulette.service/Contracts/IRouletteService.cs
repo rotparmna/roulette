@@ -6,11 +6,9 @@ namespace Masiv.Roulette.API.Contracts
     public interface IRouletteService
     {
         RouletteAddResponseDto Add();
-
         RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto);
-
         List<RouletteAddResponseDto> GetAll();
-
         void Bet(string userId, RouletteBetDto rouletteBetDto);
+        RouletteCloseResponseDto Close(RouletteCloseDto rouletteCloseDto);
     }
 }

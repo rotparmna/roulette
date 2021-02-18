@@ -1,5 +1,6 @@
 ﻿using Masiv.Roulette.API.Contracts;
 using Masiv.Roulette.API.Domain.Dtos;
+using Masiv.Roulette.API.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,34 @@ namespace Masiv.Roulette.API.Service
                     UserId = userId
                 });
             }
+        }
+
+        public RouletteCloseResponseDto Close(RouletteCloseDto rouletteCloseDto)
+        {
+            int winningNumber = new Random().Next(0, 36);
+            ColorEnum winningColor = ColorEnum.Black;
+            if (winningNumber % 2 == 0)
+                winningColor = ColorEnum.Red;
+            RouletteCloseResponseDto rouletteClose = new RouletteCloseResponseDto()
+            {
+                WinnigColor = winningColor,
+                WinningNumber = winningNumber
+            };
+            var roulette = GetById(rouletteCloseDto.Id);
+            foreach (var item in roulette.Bets)
+            {
+                double cash = 0;
+                item.IsWin = item.Number == winningNumber || item.Color == winningColor;
+                if (item.Number == winningNumber)
+                    cash = item.CashAmount * 5;
+                if (item.Color == winningColor)
+                    cash += item.CashAmount * 1.8;
+                item.WinnigCash = cash;
+                if (!item.IsWin.Value)
+                    item.CashAmount *= -1;
+            }
+
+            return rouletteClose;
         }
 
         public List<RouletteAddResponseDto> GetAll()

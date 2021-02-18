@@ -36,10 +36,12 @@ namespace Masiv.Roulette.API.Controllers
             rouletteService.Bet(userId, rouletteBetDto);
         }
 
-        //public void Close(int idRoulette)
-        //{
-
-        //}
+        [HttpPost("close")]
+        [ProducesResponseType(typeof(RouletteCloseResponseDto), StatusCodes.Status200OK)]
+        public RouletteCloseResponseDto Close(RouletteCloseDto rouletteCloseDto)
+        {
+            return rouletteService.Close(rouletteCloseDto);
+        }
 
         [HttpGet]
         [ProducesResponseType(typeof(RouletteAddResponseDto), StatusCodes.Status200OK)]
