@@ -2,6 +2,7 @@
 using Masiv.Roulette.API.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Masiv.Roulette.API.Controllers
 {
@@ -43,11 +44,11 @@ namespace Masiv.Roulette.API.Controllers
             return rouletteService.Close(rouletteCloseDto);
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(RouletteAddResponseDto), StatusCodes.Status200OK)]
-        public string GetAll()
+        [HttpGet("get_all")]
+        [ProducesResponseType(typeof(List<RouletteDto>), StatusCodes.Status200OK)]
+        public List<RouletteDto> GetAll()
         {
-            return string.Empty;
+            return rouletteService.GetAll();
         }
     }
 }

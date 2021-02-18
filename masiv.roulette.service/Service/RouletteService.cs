@@ -73,14 +73,6 @@ namespace Masiv.Roulette.API.Service
             return rouletteClose;
         }
 
-        public List<RouletteAddResponseDto> GetAll()
-        {
-            return roulettes.Select(x => new RouletteAddResponseDto
-            {
-                Id = x.Id
-            }).ToList();
-        }
-
         public RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto)
         {
             var roulette = GetById(rouletteStartDto.Id);
@@ -100,6 +92,15 @@ namespace Masiv.Roulette.API.Service
                     Result = Domain.Enums.ResultEnum.Denied
                 };
             }
+        }
+
+        public List<RouletteDto> GetAll()
+        {
+            return roulettes.Select(x => new RouletteDto
+            {
+                Id = x.Id,
+                Status = x.Status
+            }).ToList();
         }
 
         private Domain.Entities.Roulette GetById(string id)

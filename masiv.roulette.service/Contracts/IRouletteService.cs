@@ -7,8 +7,8 @@ namespace Masiv.Roulette.API.Contracts
     {
         RouletteAddResponseDto Add();
         RouletteStartResponseDto Start(RouletteStartDto rouletteStartDto);
-        List<RouletteAddResponseDto> GetAll();
         void Bet(string userId, RouletteBetDto rouletteBetDto);
         RouletteCloseResponseDto Close(RouletteCloseDto rouletteCloseDto);
+        List<RouletteDto> GetAll();
     }
 }
