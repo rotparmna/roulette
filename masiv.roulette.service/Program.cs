@@ -1,14 +1,13 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+//-----------------------------------------------------------------------------
+// <copyright file="Program.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API
 {
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
+
     public class Program
     {
         public static void Main(string[] args)

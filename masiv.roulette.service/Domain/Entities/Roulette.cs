@@ -1,14 +1,19 @@
-﻿using Masiv.Roulette.API.Domain.Enums;
-using System.Collections.Generic;
-
+﻿//-----------------------------------------------------------------------------
+// <copyright file="Roulette.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API.Domain.Entities
 {
+    using System.Collections.Generic;
+    using Masiv.Roulette.API.Domain.Enums;
+
     public class Roulette
     {
         public Roulette()
         {
-            Status = StatusEnum.None;
-            Bets = new List<Bet>();
+            this.Status = StatusEnum.None;
+            this.Bets = new List<Bet>();
         }
 
         public string Id { get; set; }

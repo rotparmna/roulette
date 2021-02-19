@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Masiv.Roulette.API.Contracts;
 using Masiv.Roulette.APITests.Mock;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Masiv.Roulette.API.Contracts;
 
 namespace Masiv.Roulette.API.Service.Tests
 {

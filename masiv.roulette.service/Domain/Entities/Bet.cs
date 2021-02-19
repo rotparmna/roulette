@@ -1,7 +1,12 @@
-﻿using Masiv.Roulette.API.Domain.Enums;
-
+﻿//-----------------------------------------------------------------------------
+// <copyright file="Bet.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API.Domain.Entities
 {
+    using Masiv.Roulette.API.Domain.Enums;
+
     public class Bet
     {
         public int Number { get; set; }

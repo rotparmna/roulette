@@ -1,16 +1,22 @@
-using Masiv.Roulette.API.Contracts;
-using Masiv.Roulette.API.Middleware.Cache;
-using Masiv.Roulette.API.Service;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
-
+//-----------------------------------------------------------------------------
+// <copyright file="Startup.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API
 {
+    using System.Text.Json.Serialization;
+    using Masiv.Roulette.API.Contracts;
+    using Masiv.Roulette.API.Middleware.Cache;
+    using Masiv.Roulette.API.Service;
+    using Masiv.Roulette.API.Utilities;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -24,10 +30,9 @@ namespace Masiv.Roulette.API
         public void ConfigureServices(IServiceCollection services)
         {
             var redisConnection = Configuration.GetConnectionString("Redis");
-
             services.AddTransient<IRouletteService, RouletteService>();
+            services.AddTransient<IGenerateRandom, GenerateRandom>();
             services.AddTransient(typeof(ICacheMiddleware<>), typeof(CacheMiddleware<>));
-
             services.AddControllers()
                 .AddJsonOptions(x =>
                 {

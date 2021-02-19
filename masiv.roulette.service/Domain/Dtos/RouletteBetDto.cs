@@ -1,9 +1,14 @@
-﻿using Masiv.Roulette.API.Domain.Enums;
-using System;
-using System.ComponentModel.DataAnnotations;
-
+﻿//-----------------------------------------------------------------------------
+// <copyright file="RouletteBetDto.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API.Domain.Dtos
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using Masiv.Roulette.API.Domain.Enums;
+
     public class RouletteBetDto
     {
         public string IdRoulette { get; set; }

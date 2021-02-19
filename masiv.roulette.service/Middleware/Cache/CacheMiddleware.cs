@@ -1,20 +1,42 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using System;
-
+﻿//-----------------------------------------------------------------------------
+// <copyright file="CacheMiddleware.cs" company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
 namespace Masiv.Roulette.API.Middleware.Cache
 {
+    using System;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// The middleware for cache.
+    /// </summary>
+    /// <typeparam name="T">Entity to cache.</typeparam>
     public class CacheMiddleware<T> : ICacheMiddleware<T>
     {
+        /// <summary>
+        /// The distributed cache.
+        /// </summary>
         private readonly IDistributedCache distributedCache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheMiddleware<>"/> class.
+        /// </summary>
+        /// <param name="distributedCache">The distributed cache.</param>
         public CacheMiddleware(IDistributedCache distributedCache)
         {
             this.distributedCache = distributedCache;
         }
-        public T GetValue(string id)
+
+        /// <summary>
+        /// Get value from cache.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>Object with data.</returns>
+        public T GetValue(string key)
         {
-            var cache = this.distributedCache.GetString(id);
+            var cache = this.distributedCache.GetString(key);
             var data = (T)Activator.CreateInstance(typeof(T));
             if (cache != null)
                 data = JsonConvert.DeserializeObject<T>(cache);
@@ -22,9 +44,14 @@ namespace Masiv.Roulette.API.Middleware.Cache
             return data;
         }
 
-        public void SetValue(string id, T value)
+        /// <summary>
+        /// Set value to cache.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The entity to cache.</param>
+        public void SetValue(string key, T value)
         {
-            this.distributedCache.SetString(id, JsonConvert.SerializeObject(value));
+            this.distributedCache.SetString(key, JsonConvert.SerializeObject(value));
         }
     }
 }

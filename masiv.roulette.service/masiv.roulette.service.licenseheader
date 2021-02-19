@@ -1,0 +1,7 @@
+﻿extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+//-----------------------------------------------------------------------------
+// <copyright company="Roulette API">
+//     Copyright © Roulette API All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------------
