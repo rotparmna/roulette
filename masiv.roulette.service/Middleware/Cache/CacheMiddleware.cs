@@ -36,7 +36,16 @@ namespace Masiv.Roulette.API.Middleware.Cache
         /// <returns>Object with data.</returns>
         public T GetValue(string key)
         {
-            var cache = this.distributedCache.GetString(key);
+            string cache = null;
+            try
+            {
+                cache = this.distributedCache.GetString(key);
+            }
+            catch (Exception ex)
+            {
+                Console.Write("Error with cache " + ex.Message);
+            }
+            
             var data = (T)Activator.CreateInstance(typeof(T));
             if (cache != null)
                 data = JsonConvert.DeserializeObject<T>(cache);
@@ -51,7 +60,14 @@ namespace Masiv.Roulette.API.Middleware.Cache
         /// <param name="value">The entity to cache.</param>
         public void SetValue(string key, T value)
         {
-            this.distributedCache.SetString(key, JsonConvert.SerializeObject(value));
+            try
+            {
+                this.distributedCache.SetString(key, JsonConvert.SerializeObject(value));
+            }
+            catch (Exception ex)
+            {
+                Console.Write("Error with cache " + ex.Message);
+            }
         }
     }
 }

@@ -38,14 +38,14 @@ namespace Masiv.Roulette.API.Service
         /// <summary>
         /// The objects roulettes in cache.
         /// </summary>
-        private List<Domain.Entities.Roulette> roulettesInCache;
+        private List<Roulette> roulettesInCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RouletteService"/> class.
         /// </summary>
         /// <param name="cacheMiddleware">The cache middleware.</param>
         /// <param name="generateRandom">The random utility.</param>
-        public RouletteService(ICacheMiddleware<List<Domain.Entities.Roulette>> cacheMiddleware, IGenerateRandom generateRandom)
+        public RouletteService(ICacheMiddleware<List<Roulette>> cacheMiddleware, IGenerateRandom generateRandom)
         {
             this.roulettesInCache = cacheMiddleware.GetValue(NAMEKEY);
             this.cacheMiddleware = cacheMiddleware;
@@ -58,7 +58,7 @@ namespace Masiv.Roulette.API.Service
         /// <returns>Object with Id the new roulette.</returns>
         public RouletteAddResponseDto Add()
         {
-            var newRoulette = new Domain.Entities.Roulette
+            var newRoulette = new Roulette
             {
                 Id = Guid.NewGuid().ToString()
             };
@@ -82,7 +82,7 @@ namespace Masiv.Roulette.API.Service
             var roulette = this.GetById(rouletteBetDto.IdRoulette);
             if (roulette.Id != Guid.Empty.ToString() && roulette.Status == StatusEnum.Open)
             {
-                roulette.Bets.Add(new Domain.Entities.Bet
+                roulette.Bets.Add(new Bet
                 {
                     CashAmount = rouletteBetDto.CashAmount,
                     Color = rouletteBetDto.Color,
@@ -201,7 +201,7 @@ namespace Masiv.Roulette.API.Service
         /// </summary>
         /// <param name="id">The identification.</param>
         /// <returns>Entity roulette.</returns>
-        private Domain.Entities.Roulette GetById(string id)
+        private Roulette GetById(string id)
         {
             return this.roulettesInCache
                 .Where(x => x.Id == id)

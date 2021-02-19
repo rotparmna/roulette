@@ -29,21 +29,18 @@ namespace Masiv.Roulette.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var redisConnection = Configuration.GetConnectionString("Redis");
-            services.AddTransient<IRouletteService, RouletteService>();
-            services.AddTransient<IGenerateRandom, GenerateRandom>();
-            services.AddTransient(typeof(ICacheMiddleware<>), typeof(CacheMiddleware<>));
+            this.AddServices(services);
             services.AddControllers()
                 .AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
             services.AddSwaggerGen(c =>
-            {   
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Masiv.Roulette.API", Version = "v1" });
             });
             services.AddDistributedRedisCache(options =>
-                options.Configuration = redisConnection);
+                options.Configuration = this.GetRedisConnection());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +59,21 @@ namespace Masiv.Roulette.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<IRouletteService, RouletteService>();
+            services.AddTransient<IGenerateRandom, GenerateRandom>();
+            services.AddTransient(typeof(ICacheMiddleware<>), typeof(CacheMiddleware<>));
+        }
+
+        private string GetRedisConnection()
+        {
+            string redisConnection = Configuration.GetValue<string>("Redis");
+            if (string.IsNullOrEmpty(redisConnection))
+                redisConnection = Configuration.GetConnectionString("Redis");
+            return redisConnection;
         }
     }
 }
