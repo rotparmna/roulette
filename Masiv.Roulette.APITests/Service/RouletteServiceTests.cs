@@ -15,7 +15,7 @@ namespace Masiv.Roulette.API.Service.Tests
             var cache = new MockCache();
             var random = new MockGenerateRandom();
             IRouletteService service = new RouletteService(cache, random);
-            var dto = service.Add();
+            var dto = service.AddRoulette();
             Assert.IsFalse(string.IsNullOrEmpty(dto.Id));
         }
 
@@ -25,8 +25,8 @@ namespace Masiv.Roulette.API.Service.Tests
             var cache = new MockCache();
             var random = new MockGenerateRandom();
             IRouletteService service = new RouletteService(cache, random);
-            var dtoAdd = service.Add();
-            var dtoStart = service.Start(new Domain.Dtos.RouletteStartDto()
+            var dtoAdd = service.AddRoulette();
+            var dtoStart = service.StartRoulette(new Domain.Dtos.RouletteStartDto()
             {
                 Id = dtoAdd.Id
             });
@@ -39,7 +39,7 @@ namespace Masiv.Roulette.API.Service.Tests
             var cache = new MockCache();
             var random = new MockGenerateRandom();
             IRouletteService service = new RouletteService(cache, random);
-            var dtoStart = service.Start(new Domain.Dtos.RouletteStartDto()
+            var dtoStart = service.StartRoulette(new Domain.Dtos.RouletteStartDto()
             {
                 Id = Guid.Empty.ToString()
             });
@@ -52,9 +52,9 @@ namespace Masiv.Roulette.API.Service.Tests
             var cache = new MockCache();
             var random = new MockGenerateRandom();
             IRouletteService service = new RouletteService(cache, random);
-            var dtoAdd = service.Add();
+            var dtoAdd = service.AddRoulette();
             cache.roulettes.First(x=>x.Id==dtoAdd.Id).Status = Domain.Enums.StatusEnum.Close;
-            var dtoStart = service.Start(new Domain.Dtos.RouletteStartDto()
+            var dtoStart = service.StartRoulette(new Domain.Dtos.RouletteStartDto()
             {
                 Id = dtoAdd.Id
             });
@@ -67,8 +67,8 @@ namespace Masiv.Roulette.API.Service.Tests
             var cache = new MockCache();
             var random = new MockGenerateRandom();
             IRouletteService service = new RouletteService(cache, random);
-            var dtoAdd = service.Add();
-            var dtoStart = service.Start(new Domain.Dtos.RouletteStartDto
+            var dtoAdd = service.AddRoulette();
+            var dtoStart = service.StartRoulette(new Domain.Dtos.RouletteStartDto
             {
                 Id = dtoAdd.Id
             });
@@ -79,7 +79,7 @@ namespace Masiv.Roulette.API.Service.Tests
                 Color = Domain.Enums.ColorEnum.Red,
                 Number = 10
             });
-            var dtoClose = service.Close(new Domain.Dtos.RouletteCloseDto()
+            var dtoClose = service.CloseRoulette(new Domain.Dtos.RouletteCloseDto()
             {
                 Id = dtoAdd.Id
             });
